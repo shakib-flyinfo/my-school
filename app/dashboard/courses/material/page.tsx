@@ -15,6 +15,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import FileActions from "./FileActions";
+import { useTheme } from "@/app/components/ThemeProvider";
 
 const materials = [
   {
@@ -68,35 +69,84 @@ const quickFolders = [
 
 export default function CourseMaterialsPage() {
   const router = useRouter();
+  const { colors, theme } = useTheme();
+
+  // Get file type color based on theme primary
+  const getFileTypeColor = (type: string) => {
+    const colors_map: Record<string, string> = {
+      'PDF': colors.primary,
+      'Video': '#3b82f6',
+      'Document': '#10b981',
+      'Archive': '#f59e0b',
+    };
+    return colors_map[type] || colors.textSecondary;
+  };
 
   return (
-    <div className="p-8 font-sans text-gray-200 min-h-screen">
+    <div 
+      className="p-8 font-sans min-h-screen transition-colors duration-300"
+      style={{ 
+        color: colors.text,
+        backgroundColor: colors.background 
+      }}
+    >
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header & Controls */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">
-              <FolderOpen size={14} className="text-red-500" />
+            <div 
+              className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-1"
+              style={{ color: colors.textSecondary }}
+            >
+              <FolderOpen size={14} style={{ color: colors.primary }} />
               <span>Resources Explorer</span>
             </div>
-            <h2 className="text-3xl font-bold text-white tracking-tight">
-              Course <span className="text-red-500">Materials</span>
+            <h2 
+              className="text-3xl font-bold tracking-tight"
+              style={{ color: colors.text }}
+            >
+              Course{" "}
+              <span style={{ color: colors.primary }}>Materials</span>
             </h2>
           </div>
 
           <div className="flex items-center gap-3 w-full lg:w-auto">
             <div className="relative flex-1 lg:w-72 group">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-red-500 transition-colors" />
+              <Search 
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors" 
+                style={{ color: colors.textSecondary }}
+                onMouseEnter={(e) => e.currentTarget.style.color = colors.primary}
+                onMouseLeave={(e) => e.currentTarget.style.color = colors.textSecondary}
+              />
               <input
                 type="text"
                 placeholder="Find resources..."
-                className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-gray-200 focus:outline-none focus:border-red-500/50 transition-all"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm transition-all focus:outline-none"
+                style={{
+                  backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                  border: `1px solid ${colors.border}`,
+                  color: colors.text,
+                }}
+                onFocus={(e) => e.target.style.borderColor = colors.primary + '80'}
+                onBlur={(e) => e.target.style.borderColor = colors.border}
               />
             </div>
             {/* 👉 Upload Button Path Connected */}
             <button
               onClick={() => router.push("/dashboard/courses/material/upload")}
-              className="flex items-center gap-2 bg-linear-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400 text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-red-600/20 active:scale-95 text-sm cursor-pointer"
+              className="flex items-center gap-2 text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-lg active:scale-95 text-sm cursor-pointer"
+              style={{
+                background: `linear-gradient(to right, ${colors.primary}, ${colors.secondary})`,
+                boxShadow: `0 10px 25px -5px ${colors.primary}40`,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = `0 15px 30px -5px ${colors.primary}60`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = `0 10px 25px -5px ${colors.primary}40`;
+              }}
             >
               <Plus className="w-4 h-4" />
               Upload
@@ -111,51 +161,113 @@ export default function CourseMaterialsPage() {
               key={i}
               onClick={() =>
                 router.push(`/dashboard/courses/material/${folder.slug}`)
-              } // 👉 Dynamic Category Route
-              className="p-4 bg-[#1e1e2d] border border-white/5 rounded-2xl flex items-center justify-between group cursor-pointer hover:bg-white/5 transition-all"
+              }
+              className="p-4 border rounded-2xl flex items-center justify-between group cursor-pointer transition-all"
+              style={{
+                backgroundColor: colors.card,
+                borderColor: colors.border,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+                e.currentTarget.style.borderColor = colors.primary + '40';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = colors.card;
+                e.currentTarget.style.borderColor = colors.border;
+              }}
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 group-hover:scale-110 transition-transform">
+                <div 
+                  className="w-10 h-10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"
+                  style={{
+                    backgroundColor: colors.primary + '20',
+                    color: colors.primary,
+                  }}
+                >
                   <FolderOpen size={20} />
                 </div>
-                <span className="text-sm font-bold text-gray-300">
+                <span 
+                  className="text-sm font-bold transition-colors"
+                  style={{ color: colors.textSecondary }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = colors.text}
+                  onMouseLeave={(e) => e.currentTarget.style.color = colors.textSecondary}
+                >
                   {folder.name}
                 </span>
               </div>
-              <ChevronRight size={16} className="text-gray-600" />
+              <ChevronRight size={16} style={{ color: colors.textSecondary + '60' }} />
             </div>
           ))}
         </div>
 
         {/* Materials List/Grid */}
-        <div className="bg-[#1e1e2d] border border-white/5 rounded-3xl overflow-hidden shadow-2xl">
-          <div className="p-6 border-b border-white/5 flex justify-between items-center bg-[#232333]">
-            <h3 className="font-bold text-white flex items-center gap-2">
+        <div 
+          className="border rounded-3xl overflow-hidden shadow-2xl transition-colors"
+          style={{
+            backgroundColor: colors.card,
+            borderColor: colors.border,
+          }}
+        >
+          <div 
+            className="p-6 border-b flex justify-between items-center"
+            style={{
+              borderColor: colors.border,
+              backgroundColor: theme === 'dark' ? '#232333' : '#e8e8e8',
+            }}
+          >
+            <h3 
+              className="font-bold flex items-center gap-2"
+              style={{ color: colors.text }}
+            >
               All Files{" "}
-              <span className="text-xs font-normal text-gray-500 px-2 py-0.5 bg-white/5 rounded-md">
+              <span 
+                className="text-xs font-normal px-2 py-0.5 rounded-md"
+                style={{
+                  color: colors.textSecondary,
+                  backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                }}
+              >
                 {materials.length} files
               </span>
             </h3>
           </div>
 
-          <div className="divide-y divide-white/5">
+          <div className="divide-y" style={{ borderColor: colors.border }}>
             {materials.map((file) => (
               <div
                 key={file.id}
-                className="p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group hover:bg-white/0.02 transition-colors"
+                className="p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group transition-colors"
+                style={{ borderColor: colors.border }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }}
               >
                 <div className="flex items-center gap-4 flex-1">
                   <div
-                    className={`w-12 h-12 rounded-2xl ${file.bg} flex items-center justify-center shadow-inner group-hover:rotate-6 transition-transform duration-300`}
+                    className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner group-hover:rotate-6 transition-transform duration-300`}
+                    style={{
+                      backgroundColor: colors.primary + '15',
+                    }}
                   >
                     {file.icon}
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-white group-hover:text-red-400 transition-colors cursor-pointer">
+                    <h4 
+                      className="text-sm font-bold transition-colors cursor-pointer"
+                      style={{ color: colors.text }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = colors.primary}
+                      onMouseLeave={(e) => e.currentTarget.style.color = colors.text}
+                    >
                       {file.title}
                     </h4>
-                    <div className="flex items-center gap-3 mt-1 text-[11px] text-gray-500 font-medium">
-                      <span className="text-red-500/70 uppercase">
+                    <div 
+                      className="flex items-center gap-3 mt-1 text-[11px] font-medium"
+                      style={{ color: colors.textSecondary }}
+                    >
+                      <span style={{ color: colors.primary + 'B3' }} className="uppercase">
                         {file.course}
                       </span>
                       <span>•</span>

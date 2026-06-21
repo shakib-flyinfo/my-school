@@ -66,9 +66,9 @@ export const menuItems: SidebarModule[] = [
     path: "/dashboard/results",
     hasSub: true,
     subModules: [
-      { name: "Exam Schedule", path: "/dashboard/results/exams", icon: CalendarDays },
+      { name: "Exam Schedule", path: "/dashboard/results/examschedule", icon: CalendarDays },
       { name: "Marksheet", path: "/dashboard/results/marksheet", icon: FileSpreadsheet },
-      { name: "Top Performers", path: "/dashboard/results/top-performers", icon: Trophy },
+      { name: "Top Performers", path: "/dashboard/results/topperformers", icon: Trophy },
     ],
   },
   {

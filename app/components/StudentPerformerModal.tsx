@@ -18,6 +18,7 @@ import {
   CheckCircle,
   Trophy,
 } from "lucide-react";
+import { useTheme } from "./ThemeProvider";
 
 interface StudentPerformerModalProps {
   isOpen: boolean;
@@ -32,6 +33,8 @@ export default function StudentPerformerModal({
   student, 
   rank 
 }: StudentPerformerModalProps) {
+  const { colors, theme } = useTheme();
+
   if (!isOpen) return null;
 
   const getRankIcon = () => {
@@ -117,7 +120,13 @@ export default function StudentPerformerModal({
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-[#1e1e2d] rounded-3xl border border-white/10 max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-300">
+      <div 
+        className="rounded-3xl border max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-300"
+        style={{
+          backgroundColor: colors.card,
+          borderColor: colors.border,
+        }}
+      >
         
         {/* Modal Header with Rank Badge */}
         <div className={`sticky top-0 bg-linear-to-r ${getRankColor()} p-6 text-white`}>
@@ -148,94 +157,238 @@ export default function StudentPerformerModal({
         <div className="p-6 space-y-6">
           {/* Academic Summary */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white/5 rounded-xl p-4 text-center">
+            <div 
+              className="rounded-xl p-4 text-center"
+              style={{
+                backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+              }}
+            >
               <Award size={20} className="text-yellow-500 mx-auto mb-2" />
-              <p className="text-[10px] font-bold text-gray-500 uppercase">GPA</p>
-              <p className="text-2xl font-bold text-white">{student.gpa}</p>
+              <p 
+                className="text-[10px] font-bold uppercase"
+                style={{ color: colors.textSecondary }}
+              >
+                GPA
+              </p>
+              <p 
+                className="text-2xl font-bold"
+                style={{ color: colors.text }}
+              >
+                {student.gpa}
+              </p>
             </div>
-            <div className="bg-white/5 rounded-xl p-4 text-center">
+            <div 
+              className="rounded-xl p-4 text-center"
+              style={{
+                backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+              }}
+            >
               <TrendingUp size={20} className="text-emerald-500 mx-auto mb-2" />
-              <p className="text-[10px] font-bold text-gray-500 uppercase">Marks</p>
-              <p className="text-2xl font-bold text-white">{student.marks || "96%"}</p>
+              <p 
+                className="text-[10px] font-bold uppercase"
+                style={{ color: colors.textSecondary }}
+              >
+                Marks
+              </p>
+              <p 
+                className="text-2xl font-bold"
+                style={{ color: colors.text }}
+              >
+                {student.marks || "96%"}
+              </p>
             </div>
-            <div className="bg-white/5 rounded-xl p-4 text-center">
+            <div 
+              className="rounded-xl p-4 text-center"
+              style={{
+                backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+              }}
+            >
               <Clock size={20} className="text-blue-500 mx-auto mb-2" />
-              <p className="text-[10px] font-bold text-gray-500 uppercase">Attendance</p>
-              <p className="text-2xl font-bold text-white">{details.attendance}</p>
+              <p 
+                className="text-[10px] font-bold uppercase"
+                style={{ color: colors.textSecondary }}
+              >
+                Attendance
+              </p>
+              <p 
+                className="text-2xl font-bold"
+                style={{ color: colors.text }}
+              >
+                {details.attendance}
+              </p>
             </div>
           </div>
 
           {/* Personal Information */}
-          <div className="bg-white/5 rounded-xl p-5">
-            <h4 className="text-sm font-bold text-white flex items-center gap-2 mb-4">
-              <User size={16} className="text-red-500" />
+          <div 
+            className="rounded-xl p-5"
+            style={{
+              backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+            }}
+          >
+            <h4 
+              className="text-sm font-bold flex items-center gap-2 mb-4"
+              style={{ color: colors.text }}
+            >
+              <User size={16} style={{ color: colors.primary }} />
               Personal Information
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center gap-3">
-                <Mail size={14} className="text-gray-500" />
+                <Mail size={14} style={{ color: colors.textSecondary }} />
                 <div>
-                  <p className="text-[10px] text-gray-500">Email</p>
-                  <p className="text-xs text-white">{details.email}</p>
+                  <p 
+                    className="text-[10px]"
+                    style={{ color: colors.textSecondary }}
+                  >
+                    Email
+                  </p>
+                  <p 
+                    className="text-xs"
+                    style={{ color: colors.text }}
+                  >
+                    {details.email}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Phone size={14} className="text-gray-500" />
+                <Phone size={14} style={{ color: colors.textSecondary }} />
                 <div>
-                  <p className="text-[10px] text-gray-500">Phone</p>
-                  <p className="text-xs text-white">{details.phone}</p>
+                  <p 
+                    className="text-[10px]"
+                    style={{ color: colors.textSecondary }}
+                  >
+                    Phone
+                  </p>
+                  <p 
+                    className="text-xs"
+                    style={{ color: colors.text }}
+                  >
+                    {details.phone}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Calendar size={14} className="text-gray-500" />
+                <Calendar size={14} style={{ color: colors.textSecondary }} />
                 <div>
-                  <p className="text-[10px] text-gray-500">Date of Birth</p>
-                  <p className="text-xs text-white">{details.dob}</p>
+                  <p 
+                    className="text-[10px]"
+                    style={{ color: colors.textSecondary }}
+                  >
+                    Date of Birth
+                  </p>
+                  <p 
+                    className="text-xs"
+                    style={{ color: colors.text }}
+                  >
+                    {details.dob}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <ShieldCheck size={14} className="text-gray-500" />
+                <ShieldCheck size={14} style={{ color: colors.textSecondary }} />
                 <div>
-                  <p className="text-[10px] text-gray-500">Guardian</p>
-                  <p className="text-xs text-white">{details.guardian}</p>
+                  <p 
+                    className="text-[10px]"
+                    style={{ color: colors.textSecondary }}
+                  >
+                    Guardian
+                  </p>
+                  <p 
+                    className="text-xs"
+                    style={{ color: colors.text }}
+                  >
+                    {details.guardian}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Award size={14} className="text-gray-500" />
+                <Award size={14} style={{ color: colors.textSecondary }} />
                 <div>
-                  <p className="text-[10px] text-gray-500">Blood Group</p>
-                  <p className="text-xs text-white">{details.bloodGroup}</p>
+                  <p 
+                    className="text-[10px]"
+                    style={{ color: colors.textSecondary }}
+                  >
+                    Blood Group
+                  </p>
+                  <p 
+                    className="text-xs"
+                    style={{ color: colors.text }}
+                  >
+                    {details.bloodGroup}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <MapPin size={14} className="text-gray-500" />
+                <MapPin size={14} style={{ color: colors.textSecondary }} />
                 <div>
-                  <p className="text-[10px] text-gray-500">Address</p>
-                  <p className="text-xs text-white">{details.address}</p>
+                  <p 
+                    className="text-[10px]"
+                    style={{ color: colors.textSecondary }}
+                  >
+                    Address
+                  </p>
+                  <p 
+                    className="text-xs"
+                    style={{ color: colors.text }}
+                  >
+                    {details.address}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Subject-wise Marks */}
-          <div className="bg-white/5 rounded-xl p-5">
-            <h4 className="text-sm font-bold text-white flex items-center gap-2 mb-4">
-              <BookOpen size={16} className="text-red-500" />
+          <div 
+            className="rounded-xl p-5"
+            style={{
+              backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+            }}
+          >
+            <h4 
+              className="text-sm font-bold flex items-center gap-2 mb-4"
+              style={{ color: colors.text }}
+            >
+              <BookOpen size={16} style={{ color: colors.primary }} />
               Subject-wise Performance
             </h4>
             <div className="space-y-3">
-              {details.subjects.map((subject: { name: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; marks: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; grade: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; }, idx: React.Key | null | undefined) => (
+              {details.subjects.map((subject: any, idx: React.Key | null | undefined) => (
                 <div key={idx} className="flex items-center justify-between">
-                  <span className="text-xs text-gray-300">{subject.name}</span>
+                  <span 
+                    className="text-xs"
+                    style={{ color: colors.textSecondary }}
+                  >
+                    {subject.name}
+                  </span>
                   <div className="flex items-center gap-4">
-                    <div className="w-32 bg-white/10 rounded-full h-1.5">
+                    <div 
+                      className="w-32 rounded-full h-1.5"
+                      style={{
+                        backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                      }}
+                    >
                       <div 
-                        className="bg-linear-to-r from-red-500 to-orange-500 h-1.5 rounded-full"
-                        style={{ width: `${subject.marks}%` }}
+                        className="h-1.5 rounded-full"
+                        style={{
+                          background: `linear-gradient(to right, ${colors.primary}, ${colors.secondary})`,
+                          width: `${subject.marks}%`,
+                        }}
                       />
                     </div>
-                    <span className="text-xs font-bold text-white w-8">{subject.marks}%</span>
-                    <span className="text-xs font-bold text-emerald-500 w-8">{subject.grade}</span>
+                    <span 
+                      className="text-xs font-bold w-8"
+                      style={{ color: colors.text }}
+                    >
+                      {subject.marks}%
+                    </span>
+                    <span 
+                      className="text-xs font-bold w-8"
+                      style={{ color: '#10b981' }}
+                    >
+                      {subject.grade}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -243,16 +396,30 @@ export default function StudentPerformerModal({
           </div>
 
           {/* Achievements */}
-          <div className="bg-linear-to-r from-yellow-500/10 to-orange-500/10 rounded-xl p-5 border border-yellow-500/20">
-            <h4 className="text-sm font-bold text-white flex items-center gap-2 mb-3">
+          <div 
+            className="rounded-xl p-5 border"
+            style={{
+              background: `linear-gradient(to right, ${colors.primary}15, ${colors.secondary}15)`,
+              borderColor: '#f59e0b40',
+            }}
+          >
+            <h4 
+              className="text-sm font-bold flex items-center gap-2 mb-3"
+              style={{ color: colors.text }}
+            >
               <Trophy size={16} className="text-yellow-500" />
               Achievements & Awards
             </h4>
             <div className="space-y-2">
-              {details.achievements.map((achievement: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined, idx: React.Key | null | undefined) => (
+              {details.achievements.map((achievement: any, idx: React.Key | null | undefined) => (
                 <div key={idx} className="flex items-center gap-2">
-                  <CheckCircle size={12} className="text-emerald-500" />
-                  <span className="text-xs text-gray-300">{achievement}</span>
+                  <CheckCircle size={12} style={{ color: '#10b981' }} />
+                  <span 
+                    className="text-xs"
+                    style={{ color: colors.textSecondary }}
+                  >
+                    {achievement}
+                  </span>
                 </div>
               ))}
             </div>
@@ -260,10 +427,28 @@ export default function StudentPerformerModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="sticky bottom-0 bg-[#1e1e2d] p-4 border-t border-white/10 flex justify-end">
+        <div 
+          className="sticky bottom-0 p-4 border-t flex justify-end"
+          style={{
+            backgroundColor: colors.card,
+            borderColor: colors.border,
+          }}
+        >
           <button
             onClick={onClose}
-            className="px-6 py-2.5 bg-linear-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 rounded-xl font-bold text-sm transition-all cursor-pointer"
+            className="px-6 py-2.5 text-white rounded-xl font-bold text-sm transition-all cursor-pointer"
+            style={{
+              background: `linear-gradient(to right, ${colors.primary}, ${colors.secondary})`,
+              boxShadow: `0 10px 25px -5px ${colors.primary}40`,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = `0 15px 30px -5px ${colors.primary}60`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = `0 10px 25px -5px ${colors.primary}40`;
+            }}
           >
             Close
           </button>

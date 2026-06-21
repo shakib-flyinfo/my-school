@@ -10,7 +10,6 @@ import {
   Globe,
   CheckCircle2,
   HelpCircle,
- 
   AlertCircle,
   User,
   AtSign,
@@ -19,8 +18,10 @@ import {
   Instagram,
   Linkedin,
 } from "lucide-react";
+import { useTheme } from "@/app/components/ThemeProvider";
 
 export default function ContactPage() {
+  const { colors, theme } = useTheme();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -95,9 +96,9 @@ export default function ContactPage() {
   };
 
   const socialLinks = [
-    { name: "Facebook", icon: <Facebook size={18} />, color: "hover:bg-blue-600", url: "#" },
-    { name: "LinkedIn", icon: <Linkedin size={18} />, color: "hover:bg-blue-700", url: "#" },
-    { name: "Instagram", icon: <Instagram size={18} />, color: "hover:bg-pink-600", url: "#" },
+    { name: "Facebook", icon: <Facebook size={18} />, color: "#1877f2", url: "#" },
+    { name: "LinkedIn", icon: <Linkedin size={18} />, color: "#0a66c2", url: "#" },
+    { name: "Instagram", icon: <Instagram size={18} />, color: "#e4405f", url: "#" },
   ];
 
   const faqs = [
@@ -107,12 +108,21 @@ export default function ContactPage() {
   ];
 
   return (
-    <div className="p-8 font-sans text-gray-200 min-h-screen bg-linear-to-br from-gray-900 via-gray-800 to-black">
+    <div 
+      className="p-8 font-sans min-h-screen transition-colors duration-300"
+      style={{ 
+        color: colors.text,
+        backgroundColor: colors.background 
+      }}
+    >
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Success Message */}
         {showSuccess && (
           <div className="fixed top-20 right-8 z-50 animate-in slide-in-from-right-5">
-            <div className="bg-emerald-500/90 backdrop-blur-xl text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3">
+            <div 
+              className="backdrop-blur-xl text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3"
+              style={{ backgroundColor: '#10b981' + 'E6' }}
+            >
               <CheckCircle2 size={24} />
               <div>
                 <p className="font-bold">Message Sent!</p>
@@ -125,29 +135,63 @@ export default function ContactPage() {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-end gap-6">
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-red-500 font-bold uppercase text-[10px] tracking-[0.3em]">
+            <div 
+              className="flex items-center gap-2 font-bold uppercase text-[10px] tracking-[0.3em]"
+              style={{ color: colors.primary }}
+            >
               <HelpCircle className="w-3.5 h-3.5" />
               <span>Get in Touch</span>
             </div>
-            <h2 className="text-4xl font-black text-white tracking-tight">
+            <h2 
+              className="text-4xl font-black tracking-tight"
+              style={{ color: colors.text }}
+            >
               Contact{" "}
-              <span className="text-transparent bg-clip-text bg-linear-to-r from-red-600 to-orange-500">
+              <span 
+                className="text-transparent bg-clip-text"
+                style={{ 
+                  backgroundImage: `linear-gradient(to right, ${colors.primary}, ${colors.secondary})`
+                }}
+              >
                 Support
               </span>
             </h2>
-            <p className="text-gray-500 text-sm max-w-sm">
+            <p 
+              className="text-sm max-w-sm"
+              style={{ color: colors.textSecondary }}
+            >
               Our team is ready to answer any questions you may have. Send a direct message.
             </p>
           </div>
-          <div className="hidden lg:flex items-center gap-4 bg-white/5 p-4 rounded-3xl border border-white/10">
-            <div className="p-3 bg-emerald-500/10 rounded-2xl text-emerald-500 animate-pulse">
+          <div 
+            className="hidden lg:flex items-center gap-4 p-4 rounded-3xl border transition-colors"
+            style={{
+              backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+              borderColor: colors.border,
+            }}
+          >
+            <div 
+              className="p-3 rounded-2xl animate-pulse"
+              style={{
+                backgroundColor: '#10b981' + '20',
+                color: '#10b981',
+              }}
+            >
               <Clock size={24} />
             </div>
             <div>
-              <p className="text-[10px] font-bold text-gray-500 uppercase">
+              <p 
+                className="text-[10px] font-bold uppercase"
+                style={{ color: colors.textSecondary }}
+              >
                 Response Time
               </p>
-              <p className="text-sm font-bold text-white">Under 2 Hours</p>
+              <p 
+                className="text-sm font-bold"
+                style={{ color: colors.text }}
+              >
+                Under 2 Hours
+              </p>
             </div>
           </div>
         </div>
@@ -183,65 +227,135 @@ export default function ContactPage() {
                 href={item.action}
                 target={item.action.startsWith("http") ? "_blank" : undefined}
                 rel={item.action.startsWith("http") ? "noopener noreferrer" : undefined}
-                className="group bg-[#1e1e2d] border border-white/5 p-6 rounded-2xl hover:border-red-500/30 transition-all shadow-xl block cursor-pointer"
+                className="group border p-6 rounded-2xl transition-all shadow-xl block cursor-pointer"
+                style={{
+                  backgroundColor: colors.card,
+                  borderColor: colors.border,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = colors.primary + '50';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = colors.border;
+                }}
               >
                 <div className="flex items-center gap-4">
-                  <div className="p-4 bg-white/5 rounded-2xl text-red-500 group-hover:bg-red-500 group-hover:text-white transition-all duration-500 shadow-lg">
+                  <div 
+                    className="p-4 rounded-2xl transition-all duration-500 shadow-lg"
+                    style={{
+                      backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                      color: colors.primary,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = colors.primary;
+                      e.currentTarget.style.color = '#ffffff';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+                      e.currentTarget.style.color = colors.primary;
+                    }}
+                  >
                     {item.icon}
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                    <p 
+                      className="text-[10px] font-bold uppercase tracking-widest"
+                      style={{ color: colors.textSecondary }}
+                    >
                       {item.label}
                     </p>
-                    <p className="text-lg font-bold text-white group-hover:text-red-400 transition-colors">
+                    <p 
+                      className="text-lg font-bold transition-colors"
+                      style={{ color: colors.text }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = colors.primary}
+                      onMouseLeave={(e) => e.currentTarget.style.color = colors.text}
+                    >
                       {item.val}
                     </p>
-                    <p className="text-xs text-gray-600 mt-0.5">{item.sub}</p>
+                    <p 
+                      className="text-xs mt-0.5"
+                      style={{ color: colors.textSecondary + '80' }}
+                    >
+                      {item.sub}
+                    </p>
                   </div>
                 </div>
               </a>
             ))}
 
             {/* Social Connect */}
-            <div className="p-6 bg-linear-to-br from-[#1e1e2d] to-[#1a1a27] border border-white/5 rounded-2xl text-center space-y-4 shadow-2xl">
+            <div 
+              className="p-6 border rounded-2xl text-center space-y-4 shadow-2xl transition-colors"
+              style={{
+                backgroundColor: colors.card,
+                borderColor: colors.border,
+              }}
+            >
               <div className="flex justify-center gap-3">
                 {socialLinks.map((social, i) => (
                   <a
                     key={i}
                     href={social.url}
-                    className={`w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 transition-all ${social.color} hover:text-white hover:scale-110`}
+                    className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                    style={{
+                      backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                      color: colors.textSecondary,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = social.color;
+                      e.currentTarget.style.color = '#ffffff';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+                      e.currentTarget.style.color = colors.textSecondary;
+                    }}
                   >
                     {social.icon}
                   </a>
                 ))}
               </div>
-              <p className="text-sm font-bold text-gray-300">
+              <p 
+                className="text-sm font-bold"
+                style={{ color: colors.text }}
+              >
                 Join our community
               </p>
-              <div className="flex items-center justify-center gap-2 text-[10px] text-gray-500">
+              <div 
+                className="flex items-center justify-center gap-2 text-[10px]"
+                style={{ color: colors.textSecondary }}
+              >
                 <Globe size={12} />
                 <span>5.2k+ followers</span>
               </div>
             </div>
 
             {/* Office Hours */}
-            <div className="bg-[#1e1e2d] border border-white/5 rounded-2xl p-6">
-              <h4 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
-                <Clock size={16} className="text-red-500" />
+            <div 
+              className="border rounded-2xl p-6 transition-colors"
+              style={{
+                backgroundColor: colors.card,
+                borderColor: colors.border,
+              }}
+            >
+              <h4 
+                className="text-sm font-bold mb-4 flex items-center gap-2"
+                style={{ color: colors.text }}
+              >
+                <Clock size={16} style={{ color: colors.primary }} />
                 Office Hours
               </h4>
               <div className="space-y-2">
                 <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Sunday - Thursday</span>
-                  <span className="text-white">9:00 AM - 5:00 PM</span>
+                  <span style={{ color: colors.textSecondary }}>Sunday - Thursday</span>
+                  <span style={{ color: colors.text }}>9:00 AM - 5:00 PM</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Friday</span>
-                  <span className="text-white">Closed</span>
+                  <span style={{ color: colors.textSecondary }}>Friday</span>
+                  <span style={{ color: colors.text }}>Closed</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Saturday</span>
-                  <span className="text-white">10:00 AM - 2:00 PM</span>
+                  <span style={{ color: colors.textSecondary }}>Saturday</span>
+                  <span style={{ color: colors.text }}>10:00 AM - 2:00 PM</span>
                 </div>
               </div>
             </div>
@@ -249,19 +363,33 @@ export default function ContactPage() {
 
           {/* Right: Contact Form */}
           <div className="lg:col-span-2">
-            <div className="bg-[#1e1e2d] border border-white/5 rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden">
+            <div 
+              className="border rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden transition-colors"
+              style={{
+                backgroundColor: colors.card,
+                borderColor: colors.border,
+              }}
+            >
               <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
-                <MessageSquare size={120} className="text-white" />
+                <MessageSquare size={120} style={{ color: colors.text }} />
               </div>
 
               <div className="relative z-10 space-y-8">
-                <h3 className="text-xl font-bold text-white">Send us a Message</h3>
+                <h3 
+                  className="text-xl font-bold"
+                  style={{ color: colors.text }}
+                >
+                  Send us a Message
+                </h3>
                 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-gray-500 uppercase ml-2 flex items-center gap-1">
-                        <User size={12} /> Full Name <span className="text-red-500">*</span>
+                      <label 
+                        className="text-[10px] font-bold uppercase ml-2 flex items-center gap-1"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <User size={12} /> Full Name <span style={{ color: colors.primary }}>*</span>
                       </label>
                       <input
                         type="text"
@@ -269,19 +397,35 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder="e.g. Sakib Ahmed"
-                        className={`w-full bg-white/5 border ${
-                          errors.name ? "border-red-500" : "border-white/10"
-                        } rounded-2xl px-5 py-3.5 text-sm text-white focus:outline-none focus:border-red-500/50 transition-all`}
+                        className={`w-full border rounded-2xl px-5 py-3.5 text-sm transition-all focus:outline-none`}
+                        style={{
+                          backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                          borderColor: errors.name ? '#ef4444' : colors.border,
+                          color: colors.text,
+                        }}
+                        onFocus={(e) => {
+                          if (!errors.name) {
+                            e.target.style.borderColor = colors.primary + '80';
+                          }
+                        }}
+                        onBlur={(e) => {
+                          if (!errors.name) {
+                            e.target.style.borderColor = colors.border;
+                          }
+                        }}
                       />
                       {errors.name && (
-                        <p className="text-[10px] text-red-500 ml-2 flex items-center gap-1">
+                        <p className="text-[10px] ml-2 flex items-center gap-1" style={{ color: '#ef4444' }}>
                           <AlertCircle size={10} /> {errors.name}
                         </p>
                       )}
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-gray-500 uppercase ml-2 flex items-center gap-1">
-                        <AtSign size={12} /> Email Address <span className="text-red-500">*</span>
+                      <label 
+                        className="text-[10px] font-bold uppercase ml-2 flex items-center gap-1"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <AtSign size={12} /> Email Address <span style={{ color: colors.primary }}>*</span>
                       </label>
                       <input
                         type="email"
@@ -289,12 +433,25 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="name@example.com"
-                        className={`w-full bg-white/5 border ${
-                          errors.email ? "border-red-500" : "border-white/10"
-                        } rounded-2xl px-5 py-3.5 text-sm text-white focus:outline-none focus:border-red-500/50 transition-all`}
+                        className={`w-full border rounded-2xl px-5 py-3.5 text-sm transition-all focus:outline-none`}
+                        style={{
+                          backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                          borderColor: errors.email ? '#ef4444' : colors.border,
+                          color: colors.text,
+                        }}
+                        onFocus={(e) => {
+                          if (!errors.email) {
+                            e.target.style.borderColor = colors.primary + '80';
+                          }
+                        }}
+                        onBlur={(e) => {
+                          if (!errors.email) {
+                            e.target.style.borderColor = colors.border;
+                          }
+                        }}
                       />
                       {errors.email && (
-                        <p className="text-[10px] text-red-500 ml-2 flex items-center gap-1">
+                        <p className="text-[10px] ml-2 flex items-center gap-1" style={{ color: '#ef4444' }}>
                           <AlertCircle size={10} /> {errors.email}
                         </p>
                       )}
@@ -302,16 +459,32 @@ export default function ContactPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase ml-2">
-                      Subject <span className="text-red-500">*</span>
+                    <label 
+                      className="text-[10px] font-bold uppercase ml-2"
+                      style={{ color: colors.textSecondary }}
+                    >
+                      Subject <span style={{ color: colors.primary }}>*</span>
                     </label>
                     <select
                       name="subject"
                       value={formData.subject}
                       onChange={handleInputChange}
-                      className={`w-full bg-white/5 border ${
-                        errors.subject ? "border-red-500" : "border-white/10"
-                      } rounded-2xl px-5 py-3.5 text-sm text-white focus:outline-none focus:border-red-500/50 transition-all appearance-none cursor-pointer`}
+                      className={`w-full border rounded-2xl px-5 py-3.5 text-sm transition-all focus:outline-none appearance-none cursor-pointer`}
+                      style={{
+                        backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                        borderColor: errors.subject ? '#ef4444' : colors.border,
+                        color: colors.text,
+                      }}
+                      onFocus={(e) => {
+                        if (!errors.subject) {
+                          e.target.style.borderColor = colors.primary + '80';
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (!errors.subject) {
+                          e.target.style.borderColor = colors.border;
+                        }
+                      }}
                     >
                       <option value="">Select a subject</option>
                       <option value="Admission Inquiry">📚 Admission Inquiry</option>
@@ -322,13 +495,16 @@ export default function ContactPage() {
                       <option value="Other">📌 Other</option>
                     </select>
                     {errors.subject && (
-                      <p className="text-[10px] text-red-500 ml-2">{errors.subject}</p>
+                      <p className="text-[10px] ml-2" style={{ color: '#ef4444' }}>{errors.subject}</p>
                     )}
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase ml-2">
-                      Message <span className="text-red-500">*</span>
+                    <label 
+                      className="text-[10px] font-bold uppercase ml-2"
+                      style={{ color: colors.textSecondary }}
+                    >
+                      Message <span style={{ color: colors.primary }}>*</span>
                     </label>
                     <textarea
                       name="message"
@@ -336,16 +512,32 @@ export default function ContactPage() {
                       value={formData.message}
                       onChange={handleInputChange}
                       placeholder="Tell us how we can help..."
-                      className={`w-full bg-white/5 border ${
-                        errors.message ? "border-red-500" : "border-white/10"
-                      } rounded-2xl px-5 py-3.5 text-sm text-white focus:outline-none focus:border-red-500/50 transition-all resize-none`}
+                      className={`w-full border rounded-2xl px-5 py-3.5 text-sm transition-all focus:outline-none resize-none`}
+                      style={{
+                        backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                        borderColor: errors.message ? '#ef4444' : colors.border,
+                        color: colors.text,
+                      }}
+                      onFocus={(e) => {
+                        if (!errors.message) {
+                          e.target.style.borderColor = colors.primary + '80';
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (!errors.message) {
+                          e.target.style.borderColor = colors.border;
+                        }
+                      }}
                     ></textarea>
                     {errors.message && (
-                      <p className="text-[10px] text-red-500 ml-2 flex items-center gap-1">
+                      <p className="text-[10px] ml-2 flex items-center gap-1" style={{ color: '#ef4444' }}>
                         <AlertCircle size={10} /> {errors.message}
                       </p>
                     )}
-                    <p className="text-[10px] text-gray-500 text-right">
+                    <p 
+                      className="text-[10px] text-right"
+                      style={{ color: colors.textSecondary }}
+                    >
                       {formData.message.length}/500 characters
                     </p>
                   </div>
@@ -353,7 +545,21 @@ export default function ContactPage() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full md:w-auto flex items-center justify-center gap-3 bg-linear-to-r from-red-600 to-orange-500 text-white px-10 py-4 rounded-2xl font-black text-sm shadow-xl shadow-red-600/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full md:w-auto flex items-center justify-center gap-3 text-white px-10 py-4 rounded-2xl font-black text-sm shadow-xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{
+                      background: `linear-gradient(to right, ${colors.primary}, ${colors.secondary})`,
+                      boxShadow: `0 10px 25px -5px ${colors.primary}40`,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isSubmitting) {
+                        e.currentTarget.style.boxShadow = `0 15px 30px -5px ${colors.primary}60`;
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isSubmitting) {
+                        e.currentTarget.style.boxShadow = `0 10px 25px -5px ${colors.primary}40`;
+                      }
+                    }}
                   >
                     {isSubmitting ? (
                       <>
@@ -368,28 +574,58 @@ export default function ContactPage() {
                     )}
                   </button>
 
-                  <div className="pt-4 flex items-center gap-2 text-[10px] text-gray-600 font-bold uppercase tracking-tighter">
-                    <CheckCircle2 size={14} className="text-emerald-500" />
-                    By sending, you agree to our privacy policy.
+                  <div className="pt-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-tighter">
+                    <CheckCircle2 size={14} style={{ color: '#10b981' }} />
+                    <span style={{ color: colors.textSecondary }}>
+                      By sending, you agree to our privacy policy.
+                    </span>
                   </div>
                 </form>
               </div>
             </div>
 
             {/* FAQ Section */}
-            <div className="mt-6 bg-[#1e1e2d] border border-white/5 rounded-3xl p-6">
-              <h4 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
-                <HelpCircle size={16} className="text-red-500" />
+            <div 
+              className="mt-6 border rounded-3xl p-6 transition-colors"
+              style={{
+                backgroundColor: colors.card,
+                borderColor: colors.border,
+              }}
+            >
+              <h4 
+                className="text-sm font-bold mb-4 flex items-center gap-2"
+                style={{ color: colors.text }}
+              >
+                <HelpCircle size={16} style={{ color: colors.primary }} />
                 Frequently Asked Questions
               </h4>
               <div className="space-y-3">
                 {faqs.map((faq, idx) => (
                   <details key={idx} className="group">
-                    <summary className="flex items-center justify-between cursor-pointer text-sm text-gray-300 hover:text-red-400 transition-colors p-3 rounded-xl hover:bg-white/5 list-none">
+                    <summary className="flex items-center justify-between cursor-pointer text-sm p-3 rounded-xl transition-colors list-none"
+                      style={{ color: colors.text }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+                        e.currentTarget.style.color = colors.primary;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = colors.text;
+                      }}
+                    >
                       <span>{faq.question}</span>
-                      <ChevronRight size={14} className="group-open:rotate-90 transition-transform" />
+                      <ChevronRight 
+                        size={14} 
+                        className="group-open:rotate-90 transition-transform"
+                        style={{ color: colors.textSecondary }}
+                      />
                     </summary>
-                    <p className="text-xs text-gray-500 p-3 pt-0">{faq.answer}</p>
+                    <p 
+                      className="text-xs p-3 pt-0"
+                      style={{ color: colors.textSecondary }}
+                    >
+                      {faq.answer}
+                    </p>
                   </details>
                 ))}
               </div>

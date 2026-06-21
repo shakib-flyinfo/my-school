@@ -33,8 +33,8 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
         isCollapsed ? "w-20" : "w-72"
       }`}
       style={{
-        backgroundColor: 'var(--sidebar-bg)',
-        borderColor: 'var(--border)'
+        backgroundColor: "var(--sidebar-bg)",
+        borderColor: "var(--border)",
       }}
     >
       {/* Logo Section */}
@@ -42,7 +42,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
         className={`relative flex flex-col items-center border-b shrink-0 transition-all ${
           isCollapsed ? "p-4" : "p-8"
         }`}
-        style={{ borderColor: 'var(--border)' }}
+        style={{ borderColor: "var(--border)" }}
       >
         {/* <button
           onClick={() => setIsCollapsed(!isCollapsed)}
@@ -61,20 +61,20 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
         </button> */}
 
         <motion.div animate={{ scale: isCollapsed ? 0.7 : 1 }}>
-          <div 
-  className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg overflow-hidden"
-  style={{
-    background: `linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)`
-  }}
->
-  <Image
-    src="/rediam.png"
-    alt="Logo"
-    width={56}
-    height={56}
-    className="rounded-full object-cover"
-  />
-</div>
+          <div
+            className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg overflow-hidden"
+            style={{
+              background: `linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)`,
+            }}
+          >
+            <Image
+              src="/rediam.png"
+              alt="Logo"
+              width={56}
+              height={56}
+              className="rounded-full object-cover"
+            />
+          </div>
         </motion.div>
         {!isCollapsed && (
           <motion.h1
@@ -83,9 +83,9 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
             className="mt-4 text-center font-black text-lg uppercase whitespace-nowrap"
             style={{
               background: `linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
             }}
           >
             Radium Public School
@@ -94,10 +94,11 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 space-y-2 pb-6 overflow-y-auto custom-scrollbar">
+      <nav className="flex-1 px-3 space-y-4 pb-6 overflow-y-auto custom-scrollbar">
         {menuItems.map((item) => {
           const isOpen = openMenus === item.name;
-          const isActive = pathname === item.path || pathname?.startsWith(item.path + "/");
+          const isActive =
+            pathname === item.path || pathname?.startsWith(item.path + "/");
 
           return (
             <div key={item.name} className="relative group">
@@ -107,15 +108,24 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
                   isCollapsed ? "justify-center" : "justify-between"
                 }`}
                 style={{
-                  backgroundColor: (isOpen || isActive) ? 'rgba(220, 38, 38, 0.1)' : 'transparent',
-                  color: (isOpen || isActive) ? 'var(--primary)' : 'var(--text-secondary)'
+                  backgroundColor:
+                    isOpen || isActive
+                      ? "rgba(220, 38, 38, 0.1)"
+                      : "transparent",
+                  color:
+                    isOpen || isActive
+                      ? "var(--primary)"
+                      : "var(--text-secondary)",
                 }}
               >
                 <div className="flex items-center gap-3">
                   <item.icon
                     size={20}
                     style={{
-                      color: (isOpen || isActive) ? 'var(--primary)' : 'var(--text-secondary)'
+                      color:
+                        isOpen || isActive
+                          ? "var(--primary)"
+                          : "var(--text-secondary)",
                     }}
                   />
                   {!isCollapsed && (
@@ -138,7 +148,9 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
                         : "pl-11"
                     }`}
                     style={{
-                      backgroundColor: isCollapsed ? 'rgba(0, 0, 0, 0.2)' : 'transparent'
+                      backgroundColor: isCollapsed
+                        ? "rgba(0, 0, 0, 0.2)"
+                        : "transparent",
                     }}
                   >
                     {item.subModules?.map((sub) => {
@@ -153,14 +165,20 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
                                 : "gap-2 py-2 px-3 rounded-lg"
                             }`}
                             style={{
-                              color: isSubActive ? 'var(--primary)' : 'var(--text-secondary)',
-                              backgroundColor: isSubActive ? 'rgba(220, 38, 38, 0.05)' : 'transparent'
+                              color: isSubActive
+                                ? "var(--primary)"
+                                : "var(--text-secondary)",
+                              backgroundColor: isSubActive
+                                ? "rgba(220, 38, 38, 0.05)"
+                                : "transparent",
                             }}
                           >
                             <sub.icon
                               size={isCollapsed ? 18 : 14}
                               style={{
-                                color: isSubActive ? 'var(--primary)' : 'var(--text-secondary)'
+                                color: isSubActive
+                                  ? "var(--primary)"
+                                  : "var(--text-secondary)",
                               }}
                             />
                             {!isCollapsed && (
@@ -169,9 +187,9 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
                               </span>
                             )}
                             {isCollapsed && (
-                              <div 
+                              <div
                                 className="absolute left-full ml-4 px-2 py-1 text-white text-[10px] rounded opacity-0 group-hover/sub:opacity-100 pointer-events-none transition-opacity z-100 whitespace-nowrap shadow-xl"
-                                style={{ backgroundColor: 'var(--primary)' }}
+                                style={{ backgroundColor: "var(--primary)" }}
                               >
                                 {sub.name}
                               </div>
@@ -194,26 +212,32 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
           isCollapsed ? "flex flex-col items-center gap-4" : ""
         }`}
         style={{
-          borderColor: 'var(--border)',
-          backgroundColor: 'var(--background)'
+          borderColor: "var(--border)",
+          backgroundColor: "var(--background)",
         }}
       >
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-3 overflow-hidden">
-            <div 
+            <div
               className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-lg shrink-0 transition-transform hover:scale-105"
               style={{
-                background: `linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)`
+                background: `linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)`,
               }}
             >
               RA
             </div>
             {!isCollapsed && (
               <div className="flex-1 overflow-hidden">
-                <p className="font-bold text-sm truncate transition-colors hover:text-primary" style={{ color: 'var(--text)' }}>
+                <p
+                  className="font-bold text-sm truncate transition-colors hover:text-primary"
+                  style={{ color: "var(--text)" }}
+                >
                   Rahat Admin
                 </p>
-                <span className="text-[10px] uppercase font-semibold" style={{ color: 'var(--text-secondary)' }}>
+                <span
+                  className="text-[10px] uppercase font-semibold"
+                  style={{ color: "var(--text-secondary)" }}
+                >
                   Super Admin
                 </span>
               </div>
@@ -224,13 +248,17 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
               onClick={() => router.push("/login")}
               className="p-2 rounded-xl transition-all group relative hover:scale-105"
               style={{
-                color: 'var(--text-secondary)',
-                backgroundColor: 'rgba(255, 255, 255, 0.05)'
+                color: "var(--text-secondary)",
+                backgroundColor: "rgba(255, 255, 255, 0.05)",
               }}
             >
-              <Power size={16} className="transition-transform group-hover:scale-110" />
-              <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded text-[9px] font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
-                style={{ backgroundColor: 'var(--primary)', color: 'white' }}
+              <Power
+                size={16}
+                className="transition-transform group-hover:scale-110"
+              />
+              <span
+                className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded text-[9px] font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+                style={{ backgroundColor: "var(--primary)", color: "white" }}
               >
                 Logout
               </span>
@@ -242,13 +270,14 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
             onClick={() => router.push("/login")}
             className="p-2.5 rounded-xl transition-all hover:scale-110 relative group"
             style={{
-              color: 'var(--text-secondary)',
-              backgroundColor: 'rgba(255, 255, 255, 0.05)'
+              color: "var(--text-secondary)",
+              backgroundColor: "rgba(255, 255, 255, 0.05)",
             }}
           >
             <Power size={18} />
-            <span className="absolute left-full ml-2 px-2 py-0.5 rounded text-[9px] font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
-              style={{ backgroundColor: 'var(--primary)', color: 'white' }}
+            <span
+              className="absolute left-full ml-2 px-2 py-0.5 rounded text-[9px] font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+              style={{ backgroundColor: "var(--primary)", color: "white" }}
             >
               Logout
             </span>

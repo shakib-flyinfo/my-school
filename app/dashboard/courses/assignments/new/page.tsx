@@ -8,9 +8,11 @@ import {
   ArrowLeft,
   Sparkles,
 } from "lucide-react";
+import { useTheme } from "@/app/components/ThemeProvider";
 
 export default function NewAssignmentPage() {
   const router = useRouter();
+  const { colors, theme } = useTheme();
 
   // ফর্ম স্টেটসমূহ
   const [title, setTitle] = useState("");
@@ -50,43 +52,87 @@ export default function NewAssignmentPage() {
   };
 
   return (
-    <div className="p-8 font-sans text-gray-200 min-h-screen">
+    <div 
+      className="p-8 font-sans min-h-screen transition-colors duration-300"
+      style={{ 
+        color: colors.text,
+        backgroundColor: colors.background 
+      }}
+    >
       <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
         {/* Top Navigation & Header */}
         <div className="flex flex-col gap-3">
           <button
             onClick={() => router.push("/dashboard/assignments")}
-            className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-red-500 transition-colors w-fit cursor-pointer"
+            className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider transition-colors w-fit cursor-pointer"
+            style={{ color: colors.textSecondary }}
+            onMouseEnter={(e) => e.currentTarget.style.color = colors.primary}
+            onMouseLeave={(e) => e.currentTarget.style.color = colors.textSecondary}
           >
             <ArrowLeft size={14} /> Back to Assignments
           </button>
 
           <div className="flex items-center justify-between">
             <div>
-              <div className="flex items-center gap-2 text-red-500 font-bold uppercase text-[10px] tracking-[0.3em] mb-1">
+              <div 
+                className="flex items-center gap-2 font-bold uppercase text-[10px] tracking-[0.3em] mb-1"
+                style={{ color: colors.primary }}
+              >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Curriculum Creator</span>
               </div>
-              <h2 className="text-3xl font-bold text-white tracking-tight">
+              <h2 
+                className="text-3xl font-bold tracking-tight"
+                style={{ color: colors.text }}
+              >
                 Create New{" "}
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-orange-400">
+                <span 
+                  className="text-transparent bg-clip-text"
+                  style={{ 
+                    backgroundImage: `linear-gradient(to right, ${colors.primary}, ${colors.secondary})`
+                  }}
+                >
                   Assignment
                 </span>
               </h2>
-              <p className="text-gray-500 text-sm mt-1">
+              <p 
+                className="text-sm mt-1"
+                style={{ color: colors.textSecondary }}
+              >
                 Publish new tasks, quizzes or lab reports for students.
               </p>
             </div>
-            <div className="p-4 bg-red-500/10 rounded-2xl text-red-500 hidden sm:block">
+            <div 
+              className="p-4 rounded-2xl hidden sm:block"
+              style={{
+                backgroundColor: colors.primary + '20',
+                color: colors.primary,
+              }}
+            >
               <FileText size={32} />
             </div>
           </div>
         </div>
 
         {/* Form Container Card */}
-        <div className="bg-[#1e1e2d] border border-white/5 rounded-3xl overflow-hidden shadow-2xl">
-          <div className="p-6 bg-[#232333] border-b border-white/5">
-            <h3 className="font-bold text-white text-base">
+        <div 
+          className="border rounded-3xl overflow-hidden shadow-2xl transition-colors"
+          style={{
+            backgroundColor: colors.card,
+            borderColor: colors.border,
+          }}
+        >
+          <div 
+            className="p-6 border-b"
+            style={{
+              backgroundColor: theme === 'dark' ? '#232333' : '#e8e8e8',
+              borderColor: colors.border,
+            }}
+          >
+            <h3 
+              className="font-bold text-base"
+              style={{ color: colors.text }}
+            >
               Assignment Specifications
             </h3>
           </div>
@@ -94,8 +140,11 @@ export default function NewAssignmentPage() {
           <form onSubmit={handleSubmit} className="p-8 space-y-6">
             {/* Title Input */}
             <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block">
-                Assignment Title <span className="text-red-500">*</span>
+              <label 
+                className="text-xs font-bold uppercase tracking-wider block"
+                style={{ color: colors.textSecondary }}
+              >
+                Assignment Title <span style={{ color: colors.primary }}>*</span>
               </label>
               <input
                 type="text"
@@ -103,21 +152,44 @@ export default function NewAssignmentPage() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g., Advanced Calculus Terminal Exam"
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-gray-200 focus:outline-none focus:border-red-500/50 focus:bg-white/[0.07] transition-all"
+                className="w-full px-4 py-3 rounded-xl text-sm transition-all focus:outline-none"
+                style={{
+                  backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                  border: `1px solid ${colors.border}`,
+                  color: colors.text,
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = colors.primary + '80';
+                  e.target.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = colors.border;
+                  e.target.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+                }}
               />
             </div>
 
             {/* Course & Priority Selectors */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block">
+                <label 
+                  className="text-xs font-bold uppercase tracking-wider block"
+                  style={{ color: colors.textSecondary }}
+                >
                   Select Course
                 </label>
                 <div className="relative">
                   <select
                     value={course}
                     onChange={(e) => setCourse(e.target.value)}
-                    className="w-full px-4 py-3 bg-[#232333] border border-white/10 rounded-xl text-sm text-gray-200 focus:outline-none focus:border-red-500/50 transition-all appearance-none cursor-pointer"
+                    className="w-full px-4 py-3 rounded-xl text-sm transition-all focus:outline-none appearance-none cursor-pointer"
+                    style={{
+                      backgroundColor: theme === 'dark' ? '#232333' : '#e8e8e8',
+                      border: `1px solid ${colors.border}`,
+                      color: colors.text,
+                    }}
+                    onFocus={(e) => e.target.style.borderColor = colors.primary + '80'}
+                    onBlur={(e) => e.target.style.borderColor = colors.border}
                   >
                     <option value="Mathematics">Mathematics</option>
                     <option value="General Science">General Science</option>
@@ -132,13 +204,23 @@ export default function NewAssignmentPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block">
+                <label 
+                  className="text-xs font-bold uppercase tracking-wider block"
+                  style={{ color: colors.textSecondary }}
+                >
                   Priority Level
                 </label>
                 <select
                   value={priority}
                   onChange={(e) => setPriority(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#232333] border border-white/10 rounded-xl text-sm text-gray-200 focus:outline-none focus:border-red-500/50 transition-all appearance-none cursor-pointer"
+                  className="w-full px-4 py-3 rounded-xl text-sm transition-all focus:outline-none appearance-none cursor-pointer"
+                  style={{
+                    backgroundColor: theme === 'dark' ? '#232333' : '#e8e8e8',
+                    border: `1px solid ${colors.border}`,
+                    color: colors.text,
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = colors.primary + '80'}
+                  onBlur={(e) => e.target.style.borderColor = colors.border}
                 >
                   <option value="High">🔴 High Priority</option>
                   <option value="Medium">🟡 Medium Priority</option>
@@ -150,21 +232,39 @@ export default function NewAssignmentPage() {
             {/* Due Date & Extra Metadata */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block">
-                  Due Date <span className="text-red-500">*</span>
+                <label 
+                  className="text-xs font-bold uppercase tracking-wider block"
+                  style={{ color: colors.textSecondary }}
+                >
+                  Due Date <span style={{ color: colors.primary }}>*</span>
                 </label>
                 <input
                   type="date"
                   required
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-gray-200 focus:outline-none focus:border-red-500/50 scheme-dark transition-all"
+                  className="w-full px-4 py-3 rounded-xl text-sm transition-all focus:outline-none"
+                  style={{
+                    backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                    border: `1px solid ${colors.border}`,
+                    color: colors.text,
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = colors.primary + '80'}
+                  onBlur={(e) => e.target.style.borderColor = colors.border}
                 />
               </div>
 
-              <div className="bg-[#232333]/50 border border-white/5 p-4 rounded-xl flex items-start gap-3 text-xs text-gray-500 self-end h-52px">
+              <div 
+                className="p-4 rounded-xl flex items-start gap-3 text-xs self-end h-[52px]"
+                style={{
+                  backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)',
+                  border: `1px solid ${colors.border}`,
+                  color: colors.textSecondary,
+                }}
+              >
                 <AlertTriangle
-                  className="text-orange-500 shrink-0 mt-0.5"
+                  className="shrink-0 mt-0.5"
+                  style={{ color: colors.secondary }}
                   size={16}
                 />
                 <p>
@@ -176,7 +276,10 @@ export default function NewAssignmentPage() {
 
             {/* Optional Description / Instructions */}
             <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block">
+              <label 
+                className="text-xs font-bold uppercase tracking-wider block"
+                style={{ color: colors.textSecondary }}
+              >
                 Instructions (Optional)
               </label>
               <textarea
@@ -184,22 +287,60 @@ export default function NewAssignmentPage() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Add assignment details, links, or guidelines for students..."
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-gray-200 focus:outline-none focus:border-red-500/50 focus:bg-white/[0.07] transition-all resize-none"
+                className="w-full px-4 py-3 rounded-xl text-sm transition-all focus:outline-none resize-none"
+                style={{
+                  backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                  border: `1px solid ${colors.border}`,
+                  color: colors.text,
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = colors.primary + '80';
+                  e.target.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = colors.border;
+                  e.target.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+                }}
               />
             </div>
 
             {/* Action Buttons */}
-            <div className="flex justify-end gap-4 pt-6 border-t border-white/5">
+            <div className="flex justify-end gap-4 pt-6" style={{ borderTop: `1px solid ${colors.border}` }}>
               <button
                 type="button"
                 onClick={() => router.push("/dashboard/assignments")}
-                className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-gray-300 rounded-xl transition-all cursor-pointer"
+                className="px-6 py-3 border text-xs font-bold rounded-xl transition-all cursor-pointer"
+                style={{
+                  backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                  borderColor: colors.border,
+                  color: colors.textSecondary,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+                  e.currentTarget.style.color = colors.text;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+                  e.currentTarget.style.color = colors.textSecondary;
+                }}
               >
                 Discard
               </button>
               <button
                 type="submit"
-                className="px-8 py-3 bg-linear-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400 text-white text-xs font-bold rounded-xl transition-all shadow-lg shadow-red-600/20 active:scale-95 cursor-pointer"
+                className="px-8 py-3 text-white text-xs font-bold rounded-xl transition-all shadow-lg active:scale-95 cursor-pointer"
+                style={{
+                  background: `linear-gradient(to right, ${colors.primary}, ${colors.secondary})`,
+                  boxShadow: `0 10px 25px -5px ${colors.primary}40`,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = `0 15px 30px -5px ${colors.primary}60`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = `0 10px 25px -5px ${colors.primary}40`;
+                }}
               >
                 Publish Assignment
               </button>

@@ -16,6 +16,7 @@ import {
   Trash2,
   Eye,
 } from "lucide-react";
+import { useTheme } from "@/app/components/ThemeProvider";
 
 interface Exam {
   id: number;
@@ -67,6 +68,7 @@ const initialExams: Exam[] = [
 
 export default function ExamSchedulePage() {
   const router = useRouter();
+  const { colors, theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("All");
   const [exams, setExams] = useState<Exam[]>(initialExams);
@@ -94,7 +96,7 @@ export default function ExamSchedulePage() {
           .header h1 { color: #333; }
           table { width: 100%; border-collapse: collapse; margin-top: 20px; }
           th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-          th { background: #f5f5f5; }
+          th { background: ${colors.primary}; color: white; }
           .footer { text-align: center; margin-top: 30px; color: #999; font-size: 12px; }
         </style>
       </head>
@@ -133,22 +135,42 @@ export default function ExamSchedulePage() {
   };
 
   return (
-    <div className="p-8 font-sans text-gray-200 min-h-screen bg-linear-to-br from-gray-900 via-gray-800 to-black">
+    <div 
+      className="p-8 font-sans min-h-screen transition-colors duration-300"
+      style={{ 
+        color: colors.text,
+        backgroundColor: colors.background 
+      }}
+    >
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
-            <div className="flex items-center gap-2 text-red-500 font-bold uppercase text-[10px] tracking-[0.3em] mb-1">
+            <div 
+              className="flex items-center gap-2 font-bold uppercase text-[10px] tracking-[0.3em] mb-1"
+              style={{ color: colors.primary }}
+            >
               <Calendar className="w-3.5 h-3.5" />
               <span>Academic Calendar</span>
             </div>
-            <h2 className="text-3xl font-bold text-white tracking-tight">
+            <h2 
+              className="text-3xl font-bold tracking-tight"
+              style={{ color: colors.text }}
+            >
               Exam{" "}
-              <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-orange-400">
+              <span 
+                className="text-transparent bg-clip-text"
+                style={{ 
+                  backgroundImage: `linear-gradient(to right, ${colors.primary}, ${colors.secondary})`
+                }}
+              >
                 Schedule
               </span>
             </h2>
-            <p className="text-gray-500 text-sm mt-1">
+            <p 
+              className="text-sm mt-1"
+              style={{ color: colors.textSecondary }}
+            >
               Total {filteredExams.length} exams scheduled
             </p>
           </div>
@@ -156,13 +178,38 @@ export default function ExamSchedulePage() {
           <div className="flex items-center gap-3 w-full md:w-auto">
             <button 
               onClick={handleDownloadPDF}
-              className="flex items-center gap-2 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-xs font-bold text-gray-400 hover:text-white hover:border-red-500/50 transition-all cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer"
+              style={{
+                backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                border: `1px solid ${colors.border}`,
+                color: colors.textSecondary,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = colors.text;
+                e.currentTarget.style.borderColor = colors.primary + '80';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = colors.textSecondary;
+                e.currentTarget.style.borderColor = colors.border;
+              }}
             >
               <Download size={16} /> Get PDF
             </button>
             <button 
               onClick={() => router.push('/dashboard/results/examschedule/new')}
-              className="flex items-center gap-2 bg-linear-to-r from-red-600 to-orange-500 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-red-600/20 active:scale-95 transition-all cursor-pointer"
+              className="flex items-center gap-2 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg active:scale-95 transition-all cursor-pointer"
+              style={{
+                background: `linear-gradient(to right, ${colors.primary}, ${colors.secondary})`,
+                boxShadow: `0 10px 25px -5px ${colors.primary}40`,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = `0 15px 30px -5px ${colors.primary}60`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = `0 10px 25px -5px ${colors.primary}40`;
+              }}
             >
               Add Schedule
             </button>
@@ -170,40 +217,98 @@ export default function ExamSchedulePage() {
         </div>
 
         {/* Warning/Notice Alert */}
-        <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-2xl flex items-center gap-4">
-          <div className="p-2 bg-red-500/20 rounded-lg text-red-500">
+        <div 
+          className="p-4 rounded-2xl flex items-center gap-4"
+          style={{
+            backgroundColor: colors.primary + '20',
+            border: `1px solid ${colors.primary}40`,
+          }}
+        >
+          <div 
+            className="p-2 rounded-lg"
+            style={{
+              backgroundColor: colors.primary + '30',
+              color: colors.primary,
+            }}
+          >
             <AlertCircle size={20} />
           </div>
-          <p className="text-xs text-red-200/80">
-            <span className="font-bold text-red-400">Important:</span> Students
+          <p 
+            className="text-xs"
+            style={{ color: colors.primary + 'CC' }}
+          >
+            <span 
+              className="font-bold"
+              style={{ color: colors.primary }}
+            >
+              Important:
+            </span> Students
             must bring their admit cards and arrive 30 minutes before the exam
             starts.
           </p>
         </div>
 
         {/* Search and Filter */}
-        <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-[#1e1e2d] p-4 rounded-2xl border border-white/5">
+        <div 
+          className="flex flex-col md:flex-row gap-4 items-center justify-between p-4 rounded-2xl border transition-colors"
+          style={{
+            backgroundColor: colors.card,
+            borderColor: colors.border,
+          }}
+        >
           <div className="relative w-full md:w-80 group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-red-500 transition-colors" />
+            <Search 
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors" 
+              style={{ color: colors.textSecondary }}
+              onMouseEnter={(e) => e.currentTarget.style.color = colors.primary}
+              onMouseLeave={(e) => e.currentTarget.style.color = colors.textSecondary}
+            />
             <input
               type="text"
               placeholder="Search by subject, code or teacher..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-gray-200 focus:outline-none focus:border-red-500/50"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm transition-all focus:outline-none"
+              style={{
+                backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                border: `1px solid ${colors.border}`,
+                color: colors.text,
+              }}
+              onFocus={(e) => e.target.style.borderColor = colors.primary + '80'}
+              onBlur={(e) => e.target.style.borderColor = colors.border}
             />
           </div>
           <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
-            <Filter size={14} className="text-gray-500" />
+            <Filter size={14} style={{ color: colors.textSecondary }} />
             {examTypes.map((type) => (
               <button
                 key={type}
                 onClick={() => setSelectedType(type)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer`}
+                style={
                   selectedType === type
-                    ? "bg-linear-to-r from-red-600 to-orange-500 text-white shadow-lg shadow-red-600/20"
-                    : "bg-white/5 text-gray-400 hover:text-white hover:bg-white/10"
-                }`}
+                    ? {
+                        background: `linear-gradient(to right, ${colors.primary}, ${colors.secondary})`,
+                        color: '#ffffff',
+                        boxShadow: `0 10px 25px -5px ${colors.primary}40`,
+                      }
+                    : {
+                        backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                        color: colors.textSecondary,
+                      }
+                }
+                onMouseEnter={(e) => {
+                  if (selectedType !== type) {
+                    e.currentTarget.style.color = colors.text;
+                    e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (selectedType !== type) {
+                    e.currentTarget.style.color = colors.textSecondary;
+                    e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+                  }
+                }}
               >
                 {type}
               </button>
@@ -214,15 +319,39 @@ export default function ExamSchedulePage() {
         {/* Schedule List */}
         <div className="space-y-4">
           {filteredExams.length === 0 ? (
-            <div className="bg-[#1e1e2d] border border-white/5 rounded-3xl p-12 text-center">
-              <div className="inline-flex p-4 bg-white/5 rounded-full text-red-500 mb-4">
+            <div 
+              className="border rounded-3xl p-12 text-center transition-colors"
+              style={{
+                backgroundColor: colors.card,
+                borderColor: colors.border,
+              }}
+            >
+              <div 
+                className="inline-flex p-4 rounded-full mb-4"
+                style={{
+                  backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                  color: colors.primary,
+                }}
+              >
                 <Calendar size={48} />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">No Exams Found</h3>
-              <p className="text-gray-500">No exams match your search criteria.</p>
+              <h3 
+                className="text-xl font-bold mb-2"
+                style={{ color: colors.text }}
+              >
+                No Exams Found
+              </h3>
+              <p style={{ color: colors.textSecondary }}>
+                No exams match your search criteria.
+              </p>
               <button
                 onClick={() => router.push('/dashboard/exams/new')}
-                className="mt-4 px-6 py-2.5 bg-linear-to-r from-red-600 to-orange-500 text-white rounded-xl text-sm font-bold cursor-pointer"
+                className="mt-4 px-6 py-2.5 text-white rounded-xl text-sm font-bold cursor-pointer"
+                style={{
+                  background: `linear-gradient(to right, ${colors.primary}, ${colors.secondary})`,
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
                 + Add New Schedule
               </button>
@@ -231,18 +360,57 @@ export default function ExamSchedulePage() {
             filteredExams.map((exam) => (
               <div
                 key={exam.id}
-                className="group bg-[#1e1e2d] border border-white/5 rounded-3xl p-6 hover:border-red-500/30 transition-all duration-300 shadow-xl"
+                className="group border rounded-3xl p-6 transition-all duration-300 shadow-xl"
+                style={{
+                  backgroundColor: colors.card,
+                  borderColor: colors.border,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = colors.primary + '50';
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = colors.border;
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
               >
                 <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center">
                   {/* Date Box */}
-                  <div className="w-full lg:w-24 h-24 bg-[#232333] rounded-2xl border border-white/10 flex flex-col items-center justify-center text-center group-hover:bg-linear-to-br group-hover:from-red-600 group-hover:to-orange-500 transition-all duration-500">
-                    <span className="text-xs font-bold text-gray-500 group-hover:text-white/80 uppercase">
+                  <div 
+                    className="w-full lg:w-24 h-24 rounded-2xl border flex flex-col items-center justify-center text-center transition-all duration-500"
+                    style={{
+                      backgroundColor: theme === 'dark' ? '#232333' : '#e8e8e8',
+                      borderColor: colors.border,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = `linear-gradient(to bottom right, ${colors.primary}, ${colors.secondary})`;
+                      e.currentTarget.style.borderColor = colors.primary;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = theme === 'dark' ? '#232333' : '#e8e8e8';
+                      e.currentTarget.style.borderColor = colors.border;
+                    }}
+                  >
+                    <span 
+                      className="text-xs font-bold uppercase transition-colors"
+                      style={{ color: colors.textSecondary }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = '#ffffffCC'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = colors.textSecondary}
+                    >
                       {exam.date.split(" ")[1]}
                     </span>
-                    <span className="text-3xl font-black text-white">
+                    <span 
+                      className="text-3xl font-black"
+                      style={{ color: colors.text }}
+                    >
                       {exam.date.split(" ")[0]}
                     </span>
-                    <span className="text-[10px] font-bold text-red-500 group-hover:text-white/90">
+                    <span 
+                      className="text-[10px] font-bold transition-colors"
+                      style={{ color: colors.primary }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = '#ffffffCC'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = colors.primary}
+                    >
                       {exam.date.split(" ")[2]}
                     </span>
                   </div>
@@ -250,40 +418,74 @@ export default function ExamSchedulePage() {
                   {/* Info Section */}
                   <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div className="space-y-1">
-                      <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                      <p 
+                        className="text-[10px] font-bold uppercase tracking-widest"
+                        style={{ color: colors.textSecondary }}
+                      >
                         {exam.code}
                       </p>
-                      <h3 className="text-xl font-bold text-white group-hover:text-red-400 transition-colors">
+                      <h3 
+                        className="text-xl font-bold transition-colors"
+                        style={{ color: colors.text }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = colors.primary}
+                        onMouseLeave={(e) => e.currentTarget.style.color = colors.text}
+                      >
                         {exam.subject}
                       </h3>
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 bg-white/5 rounded text-[9px] font-bold text-gray-400 uppercase tracking-tighter border border-white/5">
+                        <span 
+                          className="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-tighter border"
+                          style={{
+                            backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                            color: colors.textSecondary,
+                            borderColor: colors.border,
+                          }}
+                        >
                           {exam.type}
                         </span>
                       </div>
                     </div>
 
                     <div className="space-y-3">
-                      <div className="flex items-center gap-3 text-sm text-gray-400 font-medium">
-                        <Clock size={16} className="text-red-500/70" />
+                      <div 
+                        className="flex items-center gap-3 text-sm font-medium"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <Clock size={16} style={{ color: colors.primary + 'B3' }} />
                         {exam.time}
                       </div>
-                      <div className="flex items-center gap-3 text-sm text-gray-400 font-medium">
-                        <MapPin size={16} className="text-red-500/70" />
+                      <div 
+                        className="flex items-center gap-3 text-sm font-medium"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <MapPin size={16} style={{ color: colors.primary + 'B3' }} />
                         {exam.room}
                       </div>
                     </div>
 
                     <div className="flex items-center justify-between lg:justify-end gap-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400">
+                        <div 
+                          className="w-10 h-10 rounded-full border flex items-center justify-center"
+                          style={{
+                            backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                            borderColor: colors.border,
+                            color: colors.textSecondary,
+                          }}
+                        >
                           <User size={18} />
                         </div>
                         <div>
-                          <p className="text-[10px] font-bold text-gray-600 uppercase tracking-tighter">
+                          <p 
+                            className="text-[10px] font-bold uppercase tracking-tighter"
+                            style={{ color: colors.textSecondary + '80' }}
+                          >
                             Invigilator
                           </p>
-                          <p className="text-xs font-bold text-gray-300">
+                          <p 
+                            className="text-xs font-bold"
+                            style={{ color: colors.text }}
+                          >
                             {exam.teacher}
                           </p>
                         </div>
@@ -291,21 +493,57 @@ export default function ExamSchedulePage() {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => router.push(`/dashboard/exams/edit/${exam.id}`)}
-                          className="p-2 bg-white/5 rounded-xl text-blue-400 hover:text-white hover:bg-blue-500/20 transition-all cursor-pointer"
+                          className="p-2 rounded-xl transition-all cursor-pointer"
+                          style={{
+                            backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                            color: '#3b82f6',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = '#ffffff';
+                            e.currentTarget.style.backgroundColor = '#3b82f640';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = '#3b82f6';
+                            e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+                          }}
                           title="Edit"
                         >
                           <Edit size={16} />
                         </button>
                         <button
                           onClick={() => handleDeleteExam(exam.id)}
-                          className="p-2 bg-white/5 rounded-xl text-red-400 hover:text-white hover:bg-red-500/20 transition-all cursor-pointer"
+                          className="p-2 rounded-xl transition-all cursor-pointer"
+                          style={{
+                            backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                            color: '#ef4444',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = '#ffffff';
+                            e.currentTarget.style.backgroundColor = '#ef444440';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = '#ef4444';
+                            e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+                          }}
                           title="Delete"
                         >
                           <Trash2 size={16} />
                         </button>
                         <button 
                           onClick={() => router.push(`/dashboard/exams/${exam.id}`)}
-                          className="p-2 bg-white/5 rounded-xl text-gray-500 hover:text-white hover:bg-red-500/20 transition-all cursor-pointer"
+                          className="p-2 rounded-xl transition-all cursor-pointer"
+                          style={{
+                            backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                            color: colors.textSecondary,
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = colors.text;
+                            e.currentTarget.style.backgroundColor = colors.primary + '20';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = colors.textSecondary;
+                            e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+                          }}
                           title="View Details"
                         >
                           <ChevronRight size={20} />
@@ -320,22 +558,55 @@ export default function ExamSchedulePage() {
         </div>
 
         {/* Calendar View Placeholder */}
-        <div className="bg-[#1e1e2d] border border-white/5 rounded-3xl p-8 text-center space-y-4">
-          <div className="inline-flex p-4 bg-white/5 rounded-full text-red-500">
+        <div 
+          className="border rounded-3xl p-8 text-center space-y-4 transition-colors"
+          style={{
+            backgroundColor: colors.card,
+            borderColor: colors.border,
+          }}
+        >
+          <div 
+            className="inline-flex p-4 rounded-full"
+            style={{
+              backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+              color: colors.primary,
+            }}
+          >
             <BookOpen size={32} />
           </div>
           <div>
-            <h4 className="text-lg font-bold text-white">
+            <h4 
+              className="text-lg font-bold"
+              style={{ color: colors.text }}
+            >
               Looking for Full Calendar?
             </h4>
-            <p className="text-sm text-gray-500 max-w-md mx-auto">
+            <p 
+              className="text-sm max-w-md mx-auto"
+              style={{ color: colors.textSecondary }}
+            >
               You can switch to the monthly view to see the entire academic
               roadmap including holidays and events.
             </p>
           </div>
           <button 
             onClick={() => router.push('/dashboard/calendar')}
-            className="px-6 py-2.5 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-black text-gray-300 transition-all border border-white/5 uppercase tracking-widest cursor-pointer"
+            className="px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all border cursor-pointer"
+            style={{
+              backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+              color: colors.textSecondary,
+              borderColor: colors.border,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = colors.primary + '20';
+              e.currentTarget.style.color = colors.text;
+              e.currentTarget.style.borderColor = colors.primary + '80';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+              e.currentTarget.style.color = colors.textSecondary;
+              e.currentTarget.style.borderColor = colors.border;
+            }}
           >
             Open Full Calendar
           </button>
