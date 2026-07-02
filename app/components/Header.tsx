@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Search, Bell, ChevronDown, Menu, Sun, Moon } from "lucide-react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { Search, Bell, ChevronDown, Menu, Sun, Moon, Settings, User, LogOut, Shield, Mail, Phone } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "./ThemeProvider";
+import SettingsSidebar from "./SettingsSidebar";
 
 interface HeaderProps {
   isCollapsed: boolean;
@@ -11,138 +12,216 @@ interface HeaderProps {
 }
 
 export default function Header({ isCollapsed, setIsCollapsed }: HeaderProps) {
-  const { theme, toggleTheme, colors } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const [isDarkMode, setIsDarkMode] = useState(theme === 'dark');
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsDarkMode(theme === 'dark');
   }, [theme]);
 
+  // Click outside handler for profile dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const userInfo = {
+    name: "Rahat Admin",
+    email: "rahat@school.com",
+    role: "Super Admin",
+    avatar: "RA",
+    lastLogin: "Today, 10:30 AM"
+  };
+
   return (
-    <header 
-      className="sticky top-0 z-50 border-b px-6 py-3 transition-all duration-300"
-      style={{ 
-        backgroundColor: 'var(--card)',
-        borderColor: 'var(--border)'
-      }}
-    >
-      <div className="flex justify-between items-center">
-        {/* LEFT SIDE */}
-        <div className="flex items-center gap-5">
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-2 rounded-lg transition-all hover:scale-105"
-            style={{ 
-              color: 'var(--text-secondary)',
-              backgroundColor: 'transparent'
-            }}
-          >
-            <Menu className={`w-6 h-6 transition-transform ${isCollapsed ? "rotate-180" : ""}`} />
-          </button>
-
-          <h2 className="font-bold text-xl hidden md:block" style={{ color: 'var(--text)' }}>
-            RPS<span style={{ color: 'var(--primary)' }}>.</span>
-          </h2>
-
-          <div className="hidden sm:block relative">
-            <Search className="absolute left-3 top-2.5 w-4 h-4" style={{ color: 'var(--text-secondary)' }} />
-            <input
-              className="pl-10 pr-4 py-2 rounded-xl outline-none transition-all text-sm"
-              style={{
-                backgroundColor: 'var(--background)',
-                borderColor: 'var(--border)',
-                color: 'var(--text)',
-              }}
-              placeholder="Search..."
-              onFocus={(e) => {
-                e.target.style.borderColor = 'var(--primary)';
-                e.target.style.boxShadow = '0 0 0 3px rgba(220, 38, 38, 0.2)';
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = 'var(--border)';
-                e.target.style.boxShadow = 'none';
-              }}
-            />
-          </div>
-        </div>
-
-        {/* RIGHT SIDE */}
-        <div className="flex items-center gap-4">
-          {/* Theme Toggle Button */}
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => {
-              toggleTheme();
-              setIsDarkMode(!isDarkMode);
-            }}
-            className="relative p-2 rounded-xl transition-all duration-300 hover:scale-105"
-            style={{ 
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              color: 'var(--text-secondary)'
-            }}
-          >
-            <div className="relative w-5 h-5">
-              <motion.div
-                animate={{
-                  rotate: isDarkMode ? 0 : 180,
-                  scale: isDarkMode ? 1 : 0,
-                  opacity: isDarkMode ? 1 : 0,
-                }}
-                transition={{ duration: 0.3 }}
-                className="absolute inset-0"
-              >
-                <Moon className="w-5 h-5" style={{ color: 'var(--primary)' }} />
-              </motion.div>
-              <motion.div
-                animate={{
-                  rotate: isDarkMode ? -180 : 0,
-                  scale: isDarkMode ? 0 : 1,
-                  opacity: isDarkMode ? 0 : 1,
-                }}
-                transition={{ duration: 0.3 }}
-                className="absolute inset-0"
-              >
-                <Sun className="w-5 h-5 text-yellow-400" />
-              </motion.div>
-            </div>
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="relative p-2 rounded-lg transition-all"
-            style={{ 
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              color: 'var(--text-secondary)'
-            }}
-          >
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-1 right-1 w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--primary)' }} />
-          </motion.button>
-
-          <div className="flex items-center gap-2 cursor-pointer group">
-            <div 
-              className="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-105 transition-transform"
+    <>
+      <header 
+        className="sticky top-0 z-50 border-b px-6 py-3 transition-all duration-300"
+        style={{ 
+          backgroundColor: 'var(--card)',
+          borderColor: 'var(--border)'
+        }}
+      >
+        <div className="flex justify-between items-center">
+          {/* LEFT SIDE */}
+          <div className="flex items-center gap-5">
+            {/* Sidebar Toggle - Mobile */}
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="p-2 rounded-lg transition-all hover:scale-105 hover:bg-white/5"
               style={{ 
-                background: `linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)`
+                color: 'var(--text-secondary)',
+                backgroundColor: 'transparent'
               }}
             >
-              RA
-            </div>
+              <Menu className={`w-6 h-6 transition-transform ${isCollapsed ? "rotate-180" : ""}`} />
+            </button>
 
-            <div className="hidden lg:block">
-              <p className="text-sm font-bold transition-colors group-hover:text-primary" style={{ color: 'var(--text)' }}>
-                Rahat Admin
-              </p>
-              <p className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>
-                Super Admin
-              </p>
-            </div>
+         
+          </div>
 
-            <ChevronDown className="w-4 h-4 transition-colors group-hover:text-primary" style={{ color: 'var(--text-secondary)' }} />
+          {/* RIGHT SIDE */}
+          <div className="flex items-center gap-4">
+            {/* Theme Toggle Button */}
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                toggleTheme();
+                setIsDarkMode(!isDarkMode);
+              }}
+              className="relative p-2 rounded-xl transition-all duration-300 hover:scale-105 hover:bg-white/10"
+              style={{ 
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                color: 'var(--text-secondary)'
+              }}
+            >
+            
+            </motion.button>
+
+         
+
+            {/* Profile Dropdown */}
+            <div className="relative" ref={profileRef}>
+              <button
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                className="flex items-center gap-2 cursor-pointer group"
+              >
+                <div 
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-105 transition-transform"
+                  style={{ 
+                    background: `linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)`
+                  }}
+                >
+                  {userInfo.avatar}
+                </div>
+
+    
+
+          
+              </button>
+
+              {/* Profile Popup */}
+              <AnimatePresence>
+                {isProfileOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 top-full mt-2 w-72 rounded-2xl shadow-2xl overflow-hidden z-50"
+                    style={{
+                      backgroundColor: 'var(--card)',
+                      borderColor: 'var(--border)',
+                      border: '1px solid var(--border)'
+                    }}
+                  >
+                    {/* Profile Header */}
+                    <div 
+                      className="p-4 text-center"
+                      style={{
+                        background: `linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(234, 88, 12, 0.15) 100%)`,
+                        borderBottom: '1px solid var(--border)'
+                      }}
+                    >
+                      <div 
+                        className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto shadow-lg"
+                        style={{
+                          background: `linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)`
+                        }}
+                      >
+                        {userInfo.avatar}
+                      </div>
+                      <h3 className="mt-2 font-bold" style={{ color: 'var(--text)' }}>{userInfo.name}</h3>
+                      <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{userInfo.role}</p>
+                    </div>
+
+                    {/* Profile Info */}
+                    <div className="p-4 space-y-3">
+                      <div className="flex items-center gap-3 p-2 rounded-lg" style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
+                        <Mail size={14} style={{ color: 'var(--text-secondary)' }} />
+                        <span className="text-sm" style={{ color: 'var(--text)' }}>{userInfo.email}</span>
+                      </div>
+                      <div className="flex items-center gap-3 p-2 rounded-lg" style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
+                        <Shield size={14} style={{ color: 'var(--text-secondary)' }} />
+                        <span className="text-sm" style={{ color: 'var(--text)' }}>{userInfo.role}</span>
+                      </div>
+                      <div className="flex items-center gap-3 p-2 rounded-lg" style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
+                        <Phone size={14} style={{ color: 'var(--text-secondary)' }} />
+                        <span className="text-sm" style={{ color: 'var(--text)' }}>+880 1234 567890</span>
+                      </div>
+                    </div>
+
+                    {/* Divider */}
+                    <div style={{ borderColor: 'var(--border)', borderTop: '1px solid var(--border)' }} />
+
+                    {/* Actions */}
+                    <div className="p-2 space-y-1">
+                      <button 
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all hover:bg-white/5"
+                        style={{ color: 'var(--text-secondary)' }}
+                      >
+                        <User size={16} />
+                        <span className="text-sm">View Profile</span>
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setIsProfileOpen(false);
+                          setIsSettingsOpen(true);
+                        }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all hover:bg-white/5"
+                        style={{ color: 'var(--text-secondary)' }}
+                      >
+                        <Settings size={16} />
+                        <span className="text-sm">Settings</span>
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setIsProfileOpen(false);
+                          window.location.href = '/login';
+                        }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all hover:bg-red-500/10"
+                        style={{ color: '#ef4444' }}
+                      >
+                        <LogOut size={16} />
+                        <span className="text-sm font-medium">Logout</span>
+                      </button>
+                    </div>
+
+                    {/* Footer */}
+                    <div 
+                      className="p-3 text-center text-[10px]"
+                      style={{ 
+                        color: 'var(--text-secondary)',
+                        borderTop: '1px solid var(--border)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.03)'
+                      }}
+                    >
+                      Last login: {userInfo.lastLogin}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Settings Sidebar */}
+      <SettingsSidebar
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        onLogout={() => {
+          window.location.href = '/login';
+        }}
+      />
+    </>
   );
 }
